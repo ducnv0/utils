@@ -1,5 +1,7 @@
-from minio import Minio
+from datetime import timedelta
 from io import BytesIO
+
+from minio import Minio
 
 
 class CustomMinio(Minio):
@@ -54,3 +56,13 @@ class CustomMinio(Minio):
         if not bucket_name:
             bucket_name = self.default_bucket
         return super().fput_object(bucket_name, object_name, file_path, content_type, metadata, sse, progress, part_size, num_parallel_uploads, tags, retention, legal_hold)
+
+    def presigned_get_object(self, object_name, bucket_name=None, expires=timedelta(days=7), response_headers=None, request_date=None, version_id=None, extra_query_params=None):
+        if not bucket_name:
+            bucket_name = self.default_bucket
+        return super().presigned_get_object(bucket_name, object_name, expires, response_headers, request_date, version_id, extra_query_params)
+    
+    def presigned_put_object(self, object_name, bucket_name=None, expires=timedelta(days=7)):
+        if not bucket_name:
+            bucket_name = self.default_bucket
+        return super().presigned_put_object(bucket_name, object_name, expires)
