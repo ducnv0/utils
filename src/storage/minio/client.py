@@ -66,3 +66,7 @@ class CustomMinio(Minio):
         if not bucket_name:
             bucket_name = self.default_bucket
         return super().presigned_put_object(bucket_name, object_name, expires)
+    
+    def create_default_bucket(self):
+        if not self.bucket_exists(self.default_bucket):
+            self.make_bucket(self.default_bucket)
