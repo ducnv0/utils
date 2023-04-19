@@ -2,6 +2,7 @@ from datetime import timedelta
 from io import BytesIO
 
 from minio import Minio
+from minio.error import S3Error
 
 
 class CustomMinio(Minio):
@@ -70,3 +71,17 @@ class CustomMinio(Minio):
     def create_default_bucket(self):
         if not self.bucket_exists(self.default_bucket):
             self.make_bucket(self.default_bucket)
+
+    def object_exists(self, object_name, bucket_name=None):
+        exists = False
+        if not bucket_name:
+            bucket_name = self.default_bucket
+        try:
+            stat = self.stat_object(bucket_name=bucket_name, object_name=object_name)
+            exists = True
+        except S3Error as ex:
+            pass
+        finally:
+            pass
+            
+        return exists
