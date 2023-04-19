@@ -27,3 +27,18 @@ class SingletonMeta(type):
                 instance = super().__call__(*args, **kwargs)
                 cls._instances[cls] = instance
         return cls._instances[cls]
+
+# Double-checked locking could be used to reduce the overhead of acquiring a lock
+# by testing the locking criterion before acquiring the lock
+# But sometimes, it can be unsafe to use
+# (https://www.wikiwand.com/en/Double-checked_locking)
+# (https://www.cs.cornell.edu/courses/cs6120/2019fa/blog/double-checked-locking/)
+
+# def __call__(cls, *args, **kwargs):
+#     # checking the locking criterion before acquiring the lock
+#     if cls not in cls._instances:
+#         with cls._lock:
+#             if cls not in cls._instances:
+#                 instance = super().__call__(*args, **kwargs)
+#                 cls._instances[cls] = instance
+#     return cls._instances[cls]
